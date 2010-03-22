@@ -20,14 +20,15 @@ module TwitterAuth
     end
 
     def current_user
+      puts "rawrawr"
       @current_user ||= 
         if session[:user_id]
-          User.find_by_id(session[:user_id])
-        elsif cookies[:remember_token]
-          User.from_remember_token(cookies[:remember_token])
-        else
-          false
-        end
+        User.find_by_id(session[:user_id])
+      elsif cookies[:remember_token]
+        User.from_remember_token(cookies[:remember_token])
+      else
+        false
+      end
     end
 
     def current_user=(new_user)
@@ -35,15 +36,17 @@ module TwitterAuth
       @current_user = new_user
     end
 
-    def authorized?
+    def twit_authorized?
+      puts "auth rawr"
       !!current_user
     end
 
-    def login_required
-      authorized? || access_denied 
+    def twitter_login_required
+      twit_authorized? || twit_access_denied
     end
 
-    def access_denied
+    def twit_access_denied
+      puts "rawr"
       store_location
       redirect_to login_path
     end
